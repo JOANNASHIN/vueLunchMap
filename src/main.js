@@ -4,8 +4,6 @@ import router from "./router";
 import store from "./store";
 
 
-createApp(App).use(store).use(router).mount("#app");
-
 
 /* rem */
 const htmlDoc = document.documentElement;
@@ -35,3 +33,4 @@ window.onresize = function() {
 }
  
 window.dispatchEvent(new Event('resize'));
+createApp(App).use(store).use(router).mount("#app");

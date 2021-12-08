@@ -5,10 +5,13 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "vue-cli-service build && firebase deploy"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "firebase": "^8.2.4",
     "sass": "^1.44.0",
     "sass-loader": "^10.2.0",
     "sass-rem": "^3.0.0",
@@ -47,10 +50,10 @@
       "parser": "babel-eslint"
     },
     "rules": {
-        "no-unused-vars": "off"
+      "no-unused-vars": "off"
     },
     "globals": {
-        "kakao": false
+      "kakao": false
     }
   },
   "browserslist": [
