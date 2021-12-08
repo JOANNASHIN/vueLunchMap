@@ -1,0 +1,157 @@
+@import "../../node_modules/sass-rem/_rem.scss";
+@import "./divide/font";
+
+html {
+    -webkit-text-size-adjust: none;
+}
+
+//width
+$width: rem(360px);
+
+//TEXT
+$black: #1e1e1e;
+$dark: #646464;
+$medium: #a0a0a0;
+$silver: #c8c8c8;
+$white: #fff;
+
+//LINE, BG, BORDER
+$charcole: #323232; //차콜
+$light: #eaeaea;
+$bright: #f6f6f6;
+
+//SYSTEM
+$red: #ff2600;
+$yellow: #fab200;
+$green: #3ab505;
+
+$background: #272536;
+$filterPoint: rgba(24, 24, 33, 0.96);
+
+//POINT
+$pcolor: #272536;
+
+//FONT 국문
+$font_noto: "SpoqaHanSansNeo", "Notosans", sans-serif;
+
+//FONT 숫자, 영문
+$font_n: $font_noto;
+
+%clear {
+    &:after {
+        display: block;
+        clear: both;
+        content: "";
+    }
+}
+
+%scroll {
+    overflow-y: hidden;
+    overflow-x: auto;
+    margin-left: rem(-20px) !important;
+    padding-left: rem(20px) !important;
+    padding-right: rem(20px); 
+    font-size: 0;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+        display: none;
+
+        &-thumb {
+            display: none;
+        }
+
+        &-button {
+            display: none;
+        }
+    }
+}
+
+//font
+@mixin fontcss($color: $black, $weight: 200, $size: rem(14px), $lineheight: 1) {
+    @if ($color) {
+        color: $color;
+    }
+    @if ($weight) {
+        font-weight: $weight;
+    }
+    @if ($size) {
+        font-size: $size;
+    }
+    @if ($lineheight) {
+        line-height: $lineheight;
+    }
+}
+
+//말줄임 후략
+@mixin line($lineCount: 1) {
+    /* 사용법 : @include line(라인수) */
+    @if ($lineCount == 1) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } 
+    // 말줄임 후략 없앨때 (커스텀할때)
+    @else if ($lineCount == 0) {
+        display: block;
+        overflow: visible;
+        text-overflow: initial;
+        -webkit-box-orient: initial;
+        -webkit-line-clamp: initial;
+        white-space: initial;
+    } 
+    @else {
+        /* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */
+        display: block;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        -webkit-line-clamp: $lineCount;
+    }
+}
+
+//이미지 리사이징
+@mixin imageResize($type: "width") {
+    overflow: hidden;
+    position: relative;
+
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        
+        @if ($type == "width") {
+            width: 100%;
+            height: auto;
+        }
+        @else if ($type == "height") {
+            width: auto;
+            height: 100%;
+        }
+        @else if ($type == "auto") {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        // 디밀 상품이미지 1:1 비율 고정
+        @else if ($type == "fix") {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+@import "./divide/reset";
+@import "./divide/common";
+@import "./divide/layout";
+
+// page scss
+@import "./pages/map";
+@import "./pages/search";

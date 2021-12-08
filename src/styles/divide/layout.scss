@@ -1,0 +1,234 @@
+.fb {
+    &__footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 5;
+        width: 100%;
+        padding: rem(20px);
+        background: #fff;  
+        border-top-left-radius: rem(6px);
+        border-top-right-radius: rem(6px);
+        box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.4);
+    }
+
+    // &__header {
+    //     padding: rem(20px);
+
+    //     &__filter {
+    //         position: fixed;
+    //         top: rem(20px);
+    //         right: rem(30px);
+    //         width: rem(32px);
+    //         height: rem(32px);
+    //         background: $filterPoint url("/assets/images/common/ico_search_filter.png") no-repeat center center / rem(auto 24px);
+    //         box-shadow: rem(0 0 2px 2px) rgba(0, 0, 0, 0.9);
+    //         border-radius: 50%;
+    //         font-size: 0;
+    //     }
+
+    //     &__floating {
+    //         // display: none;
+    //         overflow: hidden;
+    //         position: fixed;
+    //         top: 0;
+    //         right: rem(10px);
+    //         z-index: 5;
+    //         width: rem(56px);
+    //         height: rem(26px);
+    //         padding-bottom: rem(26px);
+    //         background: rgba(0, 0, 0, 0.6);
+    //         border: {
+    //             bottom-right-radius: rem(12px);
+    //             bottom-left-radius: rem(12px);
+    //         };
+    //         text-align: center;
+    //         transition: all 0.3s ease-in-out;
+
+    //         &.active {
+    //             height: rem(122px);
+
+    //             .fb__header__menu {
+    //                 display: block;
+    //             }
+    //         }
+    //     }
+
+    //     &__fold {
+    //         position: absolute;
+    //         bottom: 0;
+    //         left: 0;
+    //         width: 100%;
+    //         height: rem(26px);
+    //         margin: 0 auto;
+    //         background: rgba(80, 80, 80, 0.9) url("/assets/images/guide/ico-dropdown-10-x-6.svg") no-repeat center center / rem(14px 14px);//100% auto;
+    //         font-size: 0;
+    //     }
+
+    //     &__menu {
+    //         display: none;
+    //         width: 100%;
+    //         height: rem(30px);
+    //         margin: rem(12px 0);
+    //         // box-shadow: rem(0px 0px 10px) $dark;
+    //         font-size: 0;
+
+    //         &.filter {
+    //             background: url("/assets/images/common/ico_search_filter.png") no-repeat center center / auto 100%;
+    //         }
+
+    
+    //         &.search {
+    //             background: url("/assets/images/guide/ico-header-search-gray.svg") no-repeat center center / rem(24px auto);
+    //         }
+    //     }
+    // }
+
+    // &__logo {
+    //     display: none;
+    // }
+    
+    // &__content {
+    //     padding: rem(0 20px 32px);
+    // }
+
+    // &__title {
+    //     @include fontcss($medium, bold, rem(20px), 1.2);
+    // }
+
+    // &__search {
+    //     display: flex;
+    //     flex-wrap: nowrap;
+    //     position: relative;
+    //     width: rem(240px);
+    //     height: rem(32px);
+    //     background: rgba(0, 0, 0, 0.6);
+    //     border-radius: rem(20px);
+    //     font-size: 0;
+
+    //     &__wrapper {
+    //         display: flex;
+    //         flex-wrap: nowrap;
+    //         align-items: center;
+    //         justify-content: space-between;
+    //         position: relative;
+    //         width: 100%;
+
+    //         &:before {
+    //             content: "";
+    //             display: inline-block;
+    //             width: rem(30px);
+    //             height: rem(30px);
+    //             margin: rem(0 10px);
+    //             background: url("/assets/images/guide/ico-header-search-wh.svg") no-repeat center center / rem(auto 20px);
+    //         }
+    //     }
+
+    //     &__input {
+    //         width: 100%;
+    //         padding: rem(12px 0);
+    //         background: none;
+    //         border: none;
+    //         border-radius: rem(6px);
+    //         color: $black;
+    //         font-weight: 200;
+    //         font-size: rem(14px);
+    //         box-sizing: border-box;
+    //         color: $white;
+    //         font-size: rem(12px);
+
+    //         &::placeholder {
+    //             color: $medium;
+    //         }
+        
+    //         &::-webkit-search-cancel-button {
+    //             display: none;
+    //             appearance: none;
+    //         }
+    //     }
+
+    //     // &__button {
+    //     //     flex: 0 0 rem(50px);
+    //     //     height: 100%;
+    //     //     background: url("/assets/images/guide/ico-header-search.svg") no-repeat center center / rem(24px 24px);
+    //     //     font-size: 0;
+    //     // }
+    // }
+
+    // &__nav {
+    //     &__wrapper {
+    //         width: 100%;
+    //         @extend %scroll;
+    //     }
+
+    //     &__menu {
+    //         display: inline-block;
+    //         margin-right: rem(10px);
+    //         @include fontcss($medium, 200, rem(14px), 1.5);
+
+    //         &.active {
+    //             color: $black;
+    //             font-weight: bold;
+    //         }
+    //     }
+    // }
+
+    // &__error {
+    //     width: 100%;
+    //     padding: rem(80px 0);
+    //     @include fontcss($white, 200, rem(16px), 1.5);
+    //     text-align: center;
+    // }
+
+    // &__skeleton {
+    //     .animate {
+    //         animation: shimmer 10s infinite linear;
+    //         background: linear-gradient(to right, #a3a3a3 10%, #aaa 60%, #c9c9c9 90%);
+    //     }
+        
+    //     @keyframes shimmer {
+    //         0% {
+    //         background-position: -1000px 0;
+    //         }
+            
+    //         100% {
+    //         background-position: 1000px 0;
+    //         }
+    //     }
+
+    //     .fb {
+    //         &__list {
+    //             &__wrapper {
+    //                 overflow-x: auto;
+
+    //                 &::-webkit-scrollbar {
+    //                     display: none;
+    //                 }
+    //             }
+
+    //             &__summary {
+    //                 display: block;
+    //             }
+    
+    //             &__name {
+    //                 display: block;
+    //                 width: rem(100px);
+    //                 height: rem(24px);
+    //                 margin-bottom: rem(20px);
+    //             }
+    
+    //             &__genre {
+    //                 display: block;
+    //                 height: rem(18px);
+    //                 margin-bottom: rem(16px);
+    //             }
+    
+    //             &__text {
+    //                 display: block;
+    //                 height: rem(12px);
+    //                 margin-bottom: rem(8px);
+    //             }
+    //         }
+    //     }
+    // }
+}
