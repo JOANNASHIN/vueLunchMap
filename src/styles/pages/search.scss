@@ -1,0 +1,34 @@
+.fb {
+    &__search {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 5;
+        width: 100%;
+        padding: rem(20px);
+
+        &__wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        &__input {
+            width: rem(280px);
+            margin-right: rem(20px);
+            padding: rem(14px 16px);
+            border-radius: rem(6px);
+            @include fontcss($medium, 200, rem(13px), 1.2);
+            text-align: left;
+            box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
+        }
+
+        &__button {
+            width: rem(30px);
+            height: rem(30px);
+            background: red;
+            font-size: 0;
+        }
+    }
+}
