@@ -30,7 +30,7 @@ $background: #272536;
 $filterPoint: rgba(24, 24, 33, 0.96);
 
 //POINT
-$pcolor: #272536;
+$pcolor: #f5cd41;
 
 //FONT 국문
 $font_noto: "SpoqaHanSansNeo", "Notosans", sans-serif;
@@ -154,5 +154,6 @@ $font_n: $font_noto;
 @import "./divide/layout";
 
 // page scss
+@import "./pages/main";
 @import "./pages/map";
 @import "./pages/search";

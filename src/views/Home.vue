@@ -12,29 +12,31 @@
                     <span class="recommend__text">오늘 점심으로</span>
 
                     <div ref="rollingSlider" class="recommend__rolling swiper-container">
-                        <template v-if="false == fetches.menuRolling">
-                            <span class="recommend__menu recommend__menu--before">
+                            <span v-show="false == fetches.menuRolling" class="recommend__menu recommend__menu--before">
                                 어떤거
                             </span>
-                        </template>
-                        <template v-else>
                             <ul ref="rollingWrapper" class="recommend__wrapper swiper-wrapper">
-                                <template v-if="menuList && menuList.length">
-                                    <template v-for="(menu, index) in menuList" :key="index">
-                                        <li class="recommend__list swiper-slide">
-                                            <em class="recommend__menu">{{menu.name}}</em>
-                                        </li>
-                                    </template>
+                                <template v-for="(menu, index) in menuList" :key="index">
+                                    <li class="recommend__list swiper-slide">
+                                        <em class="recommend__menu">{{menu.name}}</em>
+                                    </li>
                                 </template>
                             </ul>
-                        </template>
                     </div>
 
                     <span class="recommend__text">먹을까요?</span>
                 </div>
 
                 <nav class="fb__main__nav">
-                    <button class="nav__delivery" @click="menuRolling($event)">고르기</button>
+                    <template v-if="false === fetches.menuSelected">
+                        <button class="nav__button" @click="menuRolling($event)">고르기</button>
+                    </template>
+                    <template v-else>
+                        <button class="nav__button" @click="menuRolling($event)">다시 고르기</button>
+                        <a class="nav__button" href="/lunchMap">지도에서 보기</a>
+                        <!-- <button class="nav__walk">걸어서</button>
+                        <button class="nav__delivery">배달</button> -->
+                    </template>
                 </nav>
             </main>
         </template>
@@ -47,8 +49,9 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
+import Swiper from "swiper";
 
 export default {
     name: "Home",
@@ -61,12 +64,9 @@ export default {
             menuRolling: false,
         })
 
-        let menuList = reactive({});
+        const menuList = ref([]);
 
         const menuCollection = store.state.menuCollection;
-
-        fetches.getMenuData = true;
-
 
         const requestMenuList = () => {
             return new Promise((resolve, reject) => {
@@ -93,14 +93,7 @@ export default {
         const getMenuData = async () => {
             try {
                 const response = await requestMenuList();
-
-                if (response && response.length) {
-                    menuList = response;
-                }
-
-// await nextTick()
-//       console.log('Now DOM is updated')
-//     }
+                if (response) menuList.value = response;
 
                 fetches.getMenuData = true;
             }
@@ -111,10 +104,33 @@ export default {
             }
         };
 
+        let rollingSlide = null;
+
         const menuRolling = () => {
             fetches.menuRolling = true;
+            const menuTotal = menuList.value.length;
+            const randomCount = Math.floor(Math.random() * menuTotal);
+            console.log(menuTotal, randomCount)
+
+            if (rollingSlide) {
+                rollingSlide.slideToLoop(randomCount, 800);
+            }
+            else {
+                 rollingSlide = new Swiper(".recommend__rolling", {
+                    loop: true,
+                    slidesPerView: 1,
+                    direction: "vertical",
+                    allowTouchMove: false,
+                })
+            }
+
+            fetches.menuSelected = true;
+
         }
 
+        onMounted(() => {
+
+        })
 
         getMenuData();
 
