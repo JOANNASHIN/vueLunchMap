@@ -19,9 +19,17 @@
             margin-right: rem(20px);
             padding: rem(14px 16px);
             border-radius: rem(6px);
-            @include fontcss($medium, 200, rem(13px), 1.2);
+            @include fontcss($black, 400, rem(13px), 1.2);
             text-align: left;
             box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
+
+            &::placeholder {
+                color: $medium;
+            }
+
+            &::-webkit-search-cancel-button {
+                display: none;
+            }
         }
 
         &__button {

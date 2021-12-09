@@ -1,61 +1,73 @@
 <template>
     <section class="fb__map">
         <h2 class="fb__title--hidden">지도 페이지</h2>
-        <SearchComponent></SearchComponent>
+        <SearchComponent :selected-menu="selectedMenu" @search:restaurant="searchRestaurant($event)"></SearchComponent>
+        <RestaurantList :selected-menu="selectedMenu"></RestaurantList>
         <div ref="lunchMap" class="fb__map__container"></div>
     </section>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
+import { useStore } from "vuex";
 import SearchComponent from "../components/SearchComponent";
+import RestaurantList from "../components/RestaurantList";
 // import axios from "axios";
 
 export default {
     name: "Map",
 
     components: {
-        SearchComponent
+        SearchComponent,
+        RestaurantList
     },
     
     setup() {
+        const store = useStore();
+        const selectedMenu = store.state.selectedMenu;
+
+        if (selectedMenu) {
+            console.log(selectedMenu, "선택한 메뉴")
+        }
+
         const lunchMap = ref(null);
+        const positionList = [
+                {
+                    name: '모범 떡볶이', 
+                    location: "37.48512597601747, 127.03206392495402"
+                },
+                {
+                    name: '경성불백', 
+                    location: "37.479162161747034, 127.04053519812724"
+                },
+                {
+                    name: '춘천 우리 닭갈비', 
+                    location: "37.48112248605404, 127.04116125789652"
+                },
+                {
+                    name: '노브랜드 버거',
+                    location: "37.48534890822267, 127.03440779812728"
+                }
+            ]
 
         const fetchRestaurantList = () => {
             // axios
         }
 
-        const initMap = () => {
+        const drawMap = (positions) => {
             const defaultData = {
                 mapContainer: lunchMap.value,
-                centerPosition: new kakao.maps.LatLng(37.481167099868166, 127.038415684882),
                 markerSrc: "//t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
-                markerSize: new kakao.maps.Size(24, 35),
-                positions:  [
-                    {
-                        title: '모범 떡볶이', 
-                        latlng: new kakao.maps.LatLng(37.48512597601747, 127.03206392495402)
-                    },
-                    {
-                        title: '경성불백', 
-                        latlng: new kakao.maps.LatLng(37.479162161747034, 127.04053519812724)
-                    },
-                    {
-                        title: '춘천 우리 닭갈비', 
-                        latlng: new kakao.maps.LatLng(37.48112248605404, 127.04116125789652)
-                    },
-                    {
-                        title: '노브랜드 버거',
-                        latlng: new kakao.maps.LatLng(37.48534890822267, 127.03440779812728)
-                    }
-                ]
+                markerSize: "24, 35"
             }
 
-            const { mapContainer, centerPosition, markerSrc, markerSize, positions} = defaultData;
+console.log(this)
+            const { mapContainer, markerSrc, markerSize} = defaultData;
+            const centeredPosition = positions ? positions[0].location.split(",") : [37.481167099868166, 127.038415684882]
               
-            const markerImage = new kakao.maps.MarkerImage(markerSrc, markerSize); 
+            const markerImage = new kakao.maps.MarkerImage(markerSrc, new kakao.maps.Size(markerSize)); 
             const map = new kakao.maps.Map(mapContainer, {
-                center: centerPosition,
+                center: new kakao.maps.LatLng(centeredPosition[0], centeredPosition[1]),
                 level: 4
             })
 
@@ -65,19 +77,20 @@ export default {
                 };
             }
 
-            positions.forEach(location => {
-                const content = `<span class="fb__restaurant__title">${location.title}</span>`
+            positions.forEach(restaurant => {
+                const content = `<span class="fb__restaurant__title">${restaurant.name}</span>`
+                const location = restaurant.location.split(",");
                 const marker = new kakao.maps.Marker({
                     map,
-                    position: location.latlng,
-                    title : location.title,
+                    position: new kakao.maps.LatLng(location[0], location[1]),
+                    title : restaurant.name,
                     image : markerImage,
                 });
 
                 new kakao.maps.CustomOverlay({
                     map,
                     content,
-                    position: location.latlng,
+                    position: new kakao.maps.LatLng(location[0], location[1]),
                     xAnchor: 0.5,
                     yAnchor: 0
                 });
@@ -87,13 +100,19 @@ export default {
             })
         }
 
+        const searchRestaurant = async(e) => {
+            const targets = positionList.filter(v => v.name.indexOf(e) != -1);
+            console.log(targets)
+            if (targets) drawMap(targets)
+        }
+
         onMounted(() => {
             if (window.kakao && window.kakao.maps) {
-                initMap();
+                drawMap(positionList);
             }   
             else {
                 const script = document.createElement('script')
-                script.onload = () => kakao.maps.load(initMap);
+                script.onload = () => kakao.maps.load(drawMap);
                 script.src = '//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=b5d70053a01fa96cdc3ff5bf1b2dca51'
                 document.head.appendChild(script)
             }
@@ -103,6 +122,8 @@ export default {
 
         return {
             lunchMap,
+            selectedMenu,
+            searchRestaurant
         }
     }
 }

@@ -20,10 +20,25 @@ else {
 const database = firebase.firestore();
 
 export default createStore({
-  state: {
-    menuCollection: database.collection("menuList"),
-  },
-  mutations: {},
-  actions: {},
-  modules: {},
+    state: {
+        menuCollection: database.collection("menuList"),
+        selectedMenu: null,
+    },
+
+    mutations: {
+        SAVE_SELECTED(state, data) {
+            state.selectedMenu = data;
+        }
+    },
+
+    actions: {
+        request() {
+
+        },
+
+        saveSelectedMenu({ commit }, menu) {
+            commit("SAVE_SELECTED", menu)
+        }
+    },
+    modules: {},
 });

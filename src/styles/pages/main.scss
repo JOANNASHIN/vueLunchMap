@@ -51,7 +51,7 @@
                 &__button {
                     display: inline-block;
                     margin-right: rem(20px);
-                    @include fontcss($bluedark, 600, rem(22px), 1.4);
+                    @include fontcss($bluedark, 600, rem(16px), 1.4);
                 }
             }
         }

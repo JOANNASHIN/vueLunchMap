@@ -11,11 +11,23 @@
 
 <script>
 import { ref } from "vue";
+import { useStore } from "vuex";
+
 export default {
-    setup() {
+    setup(props, { emit }) {
+        const store = useStore();
+        const selectedMenu = store.state.selectedMenu;
         const searchText = ref("");
+
         const searchInit = () => {
             console.log(searchText.value,"검색단어");
+            emit("search:restaurant", searchText.value);
+        }
+
+        if (selectedMenu) {
+            console.log(selectedMenu, "선택한 메뉴")
+            searchText.value = selectedMenu.name;
+            searchInit();
         }
 
         return {

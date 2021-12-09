@@ -31,9 +31,10 @@
                     <template v-if="false === fetches.menuSelected">
                         <button class="nav__button" @click="menuRolling($event)">고르기</button>
                     </template>
+                    
                     <template v-else>
                         <button class="nav__button" @click="menuRolling($event)">다시 고르기</button>
-                        <a class="nav__button" href="/lunchMap">지도에서 보기</a>
+                        <a class="nav__button" href="/map">지도에서 보기</a>
                         <!-- <button class="nav__walk">걸어서</button>
                         <button class="nav__delivery">배달</button> -->
                     </template>
@@ -49,24 +50,42 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
 import Swiper from "swiper";
 
 export default {
     name: "Home",
+    
     setup() {
         const store = useStore();
-
+        const menuCollection = store.state.menuCollection;
+        const menuList = ref([]);
         const fetches = reactive({
             getMenuData: false,
             menuSelected: false,
             menuRolling: false,
         })
+        const selectedMenu = reactive({});
 
-        const menuList = ref([]);
+        let rollingSlide = null;
 
-        const menuCollection = store.state.menuCollection;
+        const getMenuData = async () => {
+            try {
+                const response = await requestMenuList();
+                if (response) menuList.value = response;
+
+                fetches.getMenuData = true;
+
+                await nextTick()
+                makeRollingSlider();
+            }
+            catch (err) {
+                console.error(err);
+
+                fetches.getMenuData = "error";
+            }
+        };
 
         const requestMenuList = () => {
             return new Promise((resolve, reject) => {
@@ -90,42 +109,35 @@ export default {
             })
         };
 
-        const getMenuData = async () => {
-            try {
-                const response = await requestMenuList();
-                if (response) menuList.value = response;
-
-                fetches.getMenuData = true;
-            }
-            catch (err) {
-                console.error(err);
-
-                fetches.getMenuData = "error";
-            }
-        };
-
-        let rollingSlide = null;
+        const makeRollingSlider = () => {
+             rollingSlide = new Swiper(".recommend__rolling", {
+                loop: true,
+                slidesPerView: 1,
+                direction: "vertical",
+                allowTouchMove: false,
+            })
+        }
 
         const menuRolling = () => {
+            
             fetches.menuRolling = true;
+
             const menuTotal = menuList.value.length;
             const randomCount = Math.floor(Math.random() * menuTotal);
-            console.log(menuTotal, randomCount)
 
-            if (rollingSlide) {
-                rollingSlide.slideToLoop(randomCount, 800);
-            }
-            else {
-                 rollingSlide = new Swiper(".recommend__rolling", {
-                    loop: true,
-                    slidesPerView: 1,
-                    direction: "vertical",
-                    allowTouchMove: false,
-                })
-            }
+            if (rollingSlide) rollingSlide.slideToLoop(randomCount, 800);
+            else makeRollingSlider();
 
             fetches.menuSelected = true;
 
+            setSelectedMenu(randomCount);
+        }
+
+        const setSelectedMenu = (randomCount) => {
+            // console.log(menuList.value[randomCount], randomCount)
+            selectedMenu.value = menuList.value[randomCount];
+
+            store.dispatch("saveSelectedMenu", selectedMenu.value)
         }
 
         onMounted(() => {
@@ -133,7 +145,7 @@ export default {
         })
 
         getMenuData();
-
+        
         return {
             fetches,
             menuList,
