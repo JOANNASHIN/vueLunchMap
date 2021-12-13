@@ -3,8 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
-
-
 /* rem */
 const htmlDoc = document.documentElement;
 const bodyDoc = document.querySelector("body");
@@ -32,5 +30,7 @@ window.onresize = function() {
     enSizing = true;
 }
  
+
 window.dispatchEvent(new Event('resize'));
 createApp(App).use(store).use(router).mount("#app");
+

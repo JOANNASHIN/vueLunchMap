@@ -13,14 +13,15 @@ import { useStore } from "vuex";
 export default {
     name: "RestaurantList",
     props: {
-        selectedMenu: {
-            type: Object,
-            required: false,
-        }
+      
     },
     setup() {
         const store = useStore();
-        // store.state.
+        const selectedMenu = store.state.selectedMenu;
+
+        return {
+            selectedMenu
+        }
     }
 }
 </script>

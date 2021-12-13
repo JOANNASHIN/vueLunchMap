@@ -14,10 +14,12 @@
 
     &__restaurant {
         &__title {
-            padding: rem(0 5px);
-            background: rgba(255, 255, 255, 0.7);
+            padding: rem(2px 6px);
+            // background: rgba(255, 255, 255, 0.7);
+            background: #f5cd41;
             border-radius: rem(6px);
-            color: $bluedark;
+            // color: $bluedark;
+            color: #495057;
             font-weight: bold;
             font-size: rem(12px);
             box-shadow: rem(2px 2px 2px) rgb(0 0 0 / 20%);

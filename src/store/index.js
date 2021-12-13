@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import firebase from "firebase";
+import { compileScript } from "@vue/compiler-sfc";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDHz7AynNlBgyXbBv_4I9KoRqSgzh1xkVY",
@@ -22,23 +23,22 @@ const database = firebase.firestore();
 export default createStore({
     state: {
         menuCollection: database.collection("menuList"),
+        resCollection: database.collection("restaurantList"),
         selectedMenu: null,
     },
 
     mutations: {
         SAVE_SELECTED(state, data) {
             state.selectedMenu = data;
-        }
+        },
     },
 
     actions: {
-        request() {
-
-        },
-
         saveSelectedMenu({ commit }, menu) {
             commit("SAVE_SELECTED", menu)
-        }
+        },
     },
-    modules: {},
+    modules: {
+
+    },
 });
