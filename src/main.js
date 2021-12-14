@@ -18,8 +18,6 @@ function setFontSize() {
        return ;
     }
     htmlDoc.style.fontSize = parseInt(htmlDoc.offsetWidth / 360 * 100) + '%';
-
-    bodyDoc.setAttribute("type", "mobile");
 }
  
 window.onresize = function() {
