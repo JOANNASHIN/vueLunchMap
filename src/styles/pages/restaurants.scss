@@ -7,6 +7,8 @@
         z-index: 5;
         width: 100%;
         height: 100%;
+        // top: rem(80px);
+        // height: calc(100% - #{rem(80px)});
 
         &::-webkit-scrollbar {
             display: none;
@@ -16,8 +18,8 @@
             min-height: 70%;
             font-size: 0;
 
-            &.max { 
-                min-height: 90%;
+            &.max {
+                min-height: 89%;
             }
         }
 
@@ -56,8 +58,6 @@
         &__scroll {
             height: 100%;
             padding: rem(0 0 40px);
-
-           
         }
 
         &__list {
@@ -86,6 +86,24 @@
                 width: rem(150px);
                 height: auto;
                 vertical-align: top;
+            }
+        }
+
+        &__close {
+            // display: none;
+            position: fixed;
+            left: 50%;
+            bottom: rem(70px);
+            padding: rem(6px 10px 6px);
+            background: $yellow;
+            // border: 1px solid $bluedark;
+            border-radius: rem(10px);
+            @include fontcss($bluedark, bold, rem(12px), 1.2);
+            transform: translate(-50%, 0);
+            box-shadow: rem(0 0 4px 2px) rgba(0, 0, 0, 0.4);
+            
+            &.show {
+                display: block;
             }
         }
     }

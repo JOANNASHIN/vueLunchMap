@@ -3,9 +3,13 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 5;
+        z-index: 4;
         width: 100%;
-        padding: rem(20px);
+        height: rem(80px);
+        padding: rem(15px 20px);
+        // z-index: 10;
+        // padding: rem(20px 20px);
+        // background: #fff;
 
         &__wrapper {
             display: flex;
@@ -21,6 +25,7 @@
             border-radius: rem(6px);
             @include fontcss($black, 400, rem(13px), 1.2);
             text-align: left;
+            // border: 1px solid $medium;
             box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
 
             &::placeholder {
@@ -35,7 +40,7 @@
         &__button {
             width: rem(30px);
             height: rem(30px);
-            background: red;
+            background: $medium;
             font-size: 0;
         }
     }

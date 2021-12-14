@@ -16,10 +16,9 @@
         &__title {
             padding: rem(2px 6px);
             // background: rgba(255, 255, 255, 0.7);
-            background: #f5cd41;
+            background: $yellow;
             border-radius: rem(6px);
-            // color: $bluedark;
-            color: #495057;
+            color: $bluedark;
             font-weight: bold;
             font-size: rem(12px);
             box-shadow: rem(2px 2px 2px) rgb(0 0 0 / 20%);

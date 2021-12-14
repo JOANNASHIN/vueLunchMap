@@ -7,7 +7,7 @@
     >
     <!-- v-touch:press="startTouch" -->
         <h2 class="fb__title--hidden">레스토랑 리스트 레이어</h2>
-        <div class="fb__restaurants__space">빈 배경 공간</div>
+        <div class="fb__restaurants__space" :class="isTouched ? 'max' : ''">빈 배경 공간</div>
 
         <div class="fb__restaurants__cont">
             <button class="fb__restaurants__touch">레이어 확대버튼</button>
@@ -40,6 +40,8 @@
                     <p class="fb__restaurants__empty">리스트가 없습니다.</p>
                 </template>
             </div>
+
+            <!-- <button class="fb__restaurants__close" @click="closeLayer()">지도보기</button> -->
         </div>
     </article>
 </template>
@@ -69,15 +71,16 @@ export default {
         // #region [scroll]
         let _prev = 0;
         let _moved = 0;
-
+        const isTouched = ref(false);
         const dragTouch = (e) => {
+            console.log(e)
             const _current = e.touches && e.touches.length ? e.touches[0].clientY : 0;
             _moved = _current - _prev;
             _prev = _current;
         }
 
         const endTouch = () => {
-            if (_moved >= 0) document.querySelector(".fb__restaurants__space").classList.add("max");
+            if (_moved >= 0) isTouched.value = true;
             _prev = 0;
         }
         // #endregion [scroll]
@@ -86,12 +89,17 @@ export default {
             console.log("openDetailLayer")
         }
 
+        const closeLayer = () => {
+            // document.querySelector(".fb__restaurants__space")
+        }
+
         requestPositions();
 
         return {
             selectedMenu,
             restaurantListLayer,
             restaurants,
+            isTouched,
             dragTouch,
             endTouch,
             openDetailLayer
