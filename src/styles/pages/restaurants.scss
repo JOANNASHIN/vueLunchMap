@@ -1,0 +1,93 @@
+.fb {
+    &__restaurants {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        z-index: 5;
+        width: 100%;
+        height: 100%;
+        padding: rem(25px 0 0);
+        background: #fff;
+        border-top-left-radius: rem(6px);
+        border-top-right-radius: rem(6px);
+        box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
+        transform: translate(0, 0);
+
+        &.full {
+            transform: translate(0, -40%) !important;
+
+            .fb__restaurants__scroll {
+                overflow: auto;
+            }
+        }
+
+        &.down {
+            transform: translate(0, 0) !important;
+
+            .fb__restaurants__scroll {
+                overflow: hidden;
+            }
+        }
+
+        &__touch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: rem(25px);
+            font-size: 0;
+
+            &:before {
+                content: "";
+                position: absolute;
+                top: rem(10px);
+                left: 50%;
+                z-index: 5;
+                width: rem(60px);
+                height: rem(4px);
+                background: $bluedark;
+                border-radius: rem(6px);
+                transform: translate(-50%, 0);
+            }
+        }
+
+        &__scroll {
+            overflow: hidden;
+            height: 100%;
+            padding: rem(0 0 40px);
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        &__list {
+            padding: rem(20px 15px);
+            border-bottom: 1px solid $bright;
+        }
+        
+        &__name {
+            display: block;
+            margin-bottom: rem(6px);
+            @include fontcss($bluedark, bold, rem(18px), 1.2);
+        }
+
+        &__desc {
+            @include fontcss($dark, 200, rem(13px), 1.2);
+        }
+
+        &__img {
+            overflow-x: auto;
+            display: block;
+            width: 100%;
+            margin-top: rem(12px);
+
+            img {
+                display: inline-block;
+                width: rem(150px);
+                height: auto;
+                vertical-align: top;
+            }
+        }
+    }
+}

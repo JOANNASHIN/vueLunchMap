@@ -3,7 +3,7 @@
         <fieldset class="fb__search__wrapper">
             <legend>음식/ 음식점 검색하기</legend>
 
-            <input type="search" class="fb__search__input" placeholder="음식명 또는 음식점을 검색해보세요." v-model="searchText">
+            <input ref="searchInput" type="search" class="fb__search__input" placeholder="음식명 또는 음식점을 검색해보세요." v-model="searchText">
             <button type="submit" class="fb__search__button">검색버튼</button>
         </fieldset>
     </form>
@@ -15,15 +15,16 @@ import { useStore } from "vuex";
 
 export default {
     setup(props, { emit }) {
-        onMounted(() =>{
-            
-        })
         const store = useStore();
-        const selectedMenu = store.state.selectedMenu;
+
+        const searchInput = ref(null);
         const searchText = ref("");
+        
+        const selectedMenu = store.state.selectedMenu;
+
 
         const searchInit = () => {
-            console.log(searchText.value)
+            if (searchInput.value) searchInput.value.blur();
             emit("search:restaurant", searchText.value);
         }
 

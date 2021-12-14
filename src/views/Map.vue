@@ -1,8 +1,6 @@
 <template>
     <section class="fb__map">
         <h2 class="fb__title--hidden">지도 페이지</h2>
-        <button style="position: fixed; top: 0;
-        left: 0; z-index:999;" @click="removeMarkers()"> 버튼</button>
         <SearchComponent @search:restaurant="searchRestaurant($event)"></SearchComponent>
         <RestaurantList></RestaurantList>
         <div ref="lunchMap" class="fb__map__container"></div>
@@ -30,6 +28,10 @@ export default {
         const searchRestaurant = (e) => {
             searchWord.value = e;
         }
+
+        watch(searchWord, () => {
+            if (positionList && positionList.length) drawMarkers();
+        })
         // #endregion
 
 
@@ -88,8 +90,6 @@ export default {
         }
 
         
-
-        //@TODO: visible로 처리해보기
         const removeMarkers = () => {
             if (markers && markers.length) {
                 markers.forEach(mk => {
@@ -99,7 +99,7 @@ export default {
             
             if (customOverlays && customOverlays.length) {
                 customOverlays.forEach(overlay => {
-                    overlay.setVisible(false);
+                    overlay.setMap(null);
                 })
             }
         }
@@ -128,12 +128,13 @@ export default {
                         map,
                         content,
                         position: new kakao.maps.LatLng(location[0], location[1]),
-                        xAnchor: 0.5,
-                        yAnchor: -1.4
+                        xAnchor: 0.45,
+                        yAnchor: -1.5
                     });
     
                     //
                     marker.setMap(map)
+                    kakao.maps.event.addListener(marker, 'click', markerClick(restaurant));
 
                     //
                     markers.push(marker);
@@ -143,9 +144,12 @@ export default {
         }
         // #endregion
 
-        watch(searchWord, () => {
-            if (positionList && positionList.length) drawMarkers();
-        })
+        
+        const markerClick = (restaurant) => {
+            return () => {
+                console.log("클릭", restaurant)
+            };
+        }
       
         onMounted(async () => {
             requestPositions();
@@ -154,7 +158,6 @@ export default {
         return {
             lunchMap,
             searchRestaurant,
-            removeMarkers
         }
     }
 }
