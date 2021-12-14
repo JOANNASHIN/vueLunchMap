@@ -2,7 +2,7 @@
     &__restaurants {
         overflow: auto;
         position: absolute;
-        top: 80px;
+        top: 0;
         left: 0;
         width: 100%;
         height: 100%;
@@ -11,7 +11,7 @@
             display: none;
         }
 
-        &__cont {
+        &__layer {
             position: relative;
             z-index: 2;
             padding: rem(25px 0 0);
@@ -21,11 +21,15 @@
                 top-right-radius: rem(6px);
             }
             box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
-            transform: translate(0, #{rem(700px)});
+            transform: translateY(80vh);
 
-            &.open {
-                transform: translate(0, #{rem(500px)});
-            }
+            // &.hide {
+            //     transform: translateY(80vh);
+            // }
+
+            // &.visible {
+            //     transform: translateY(50vh);
+            // }
         }
 
         &__touch {
@@ -42,17 +46,16 @@
                 top: rem(10px);
                 left: 50%;
                 z-index: 5;
-                width: rem(60px);
-                height: rem(4px);
+                width: rem(50px);
+                height: rem(3px);
                 background: $bluedark;
                 border-radius: rem(6px);
                 transform: translate(-50%, 0);
             }
         }
 
-        &__scroll {
-            overflow: auto;
-            height: rem(650px);
+        &__wrapper {
+            height: 100%;
             padding: rem(0 0 40px);
 
             &::-webkit-scrollbar {
@@ -90,22 +93,17 @@
             }
         }
 
-        &__close {
-            // display: none;
-            position: fixed;
+        &__open {
+            position: absolute;
+            bottom: rem(100px);
             left: 50%;
-            bottom: rem(70px);
+            z-index: 1;
             padding: rem(6px 10px 6px);
-            background: $yellow;
-            // border: 1px solid $bluedark;
-            border-radius: rem(10px);
+            background: $white;
+            border: rem(2px) solid $bluedark;
+            border-radius: rem(20px);
             @include fontcss($bluedark, bold, rem(12px), 1.2);
             transform: translate(-50%, 0);
-            box-shadow: rem(0 0 4px 2px) rgba(0, 0, 0, 0.4);
-            
-            &.show {
-                display: block;
-            }
         }
     }
 }

@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import firebase from "firebase";
-import { compileScript } from "@vue/compiler-sfc";
+import mitt from 'mitt';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDHz7AynNlBgyXbBv_4I9KoRqSgzh1xkVY",
@@ -25,6 +25,7 @@ export default createStore({
         menuCollection: database.collection("menuList"),
         resCollection: database.collection("restaurantList"),
         selectedMenu: null,
+        emitter: mitt(),
     },
 
     mutations: {

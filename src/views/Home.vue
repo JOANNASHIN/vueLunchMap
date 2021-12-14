@@ -34,7 +34,7 @@
                     
                     <template v-else>
                         <button class="nav__button" @click="menuRolling($event)">다시 고르기</button>
-                        <a class="nav__button" href="/map">지도에서 보기</a>
+                        <router-link to="/map" class="nav__button">지도에서 보기</router-link>
                         <!-- <button class="nav__walk">걸어서</button>
                         <button class="nav__delivery">배달</button> -->
                     </template>

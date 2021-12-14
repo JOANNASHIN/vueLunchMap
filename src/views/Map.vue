@@ -1,27 +1,40 @@
 <template>
     <section class="fb__map">
         <h2 class="fb__title--hidden">지도 페이지</h2>
-        <SearchComponent @search:restaurant="searchRestaurant($event)"></SearchComponent>
+        <MapHeader @search:restaurant="searchRestaurant($event)"></MapHeader>
         <RestaurantList></RestaurantList>
         <div ref="lunchMap" class="fb__map__container"></div>
+        <button class="fb__restaurants__open" @click="showListLayer()">목록보기</button>
     </section>
 </template>
 
 <script>
 import { ref, onMounted, watch, watchEffect } from "vue";
+import { useStore } from "vuex";
 import { connectDatabase } from "../composables/connectDatabase";
-import SearchComponent from "../components/SearchComponent";
+import MapHeader from "../components/MapHeader";
 import RestaurantList from "../components/RestaurantList";
 
 export default {
     name: "Map",
 
     components: {
-        SearchComponent,
+        MapHeader,
         RestaurantList
     },
     
     setup() {
+        //연습장
+        const store = useStore();
+        const { emitter } = store.state;
+
+        const showListLayer = () => {
+            emitter.emit('show-list-layer')
+        }
+        
+
+
+
         // #region [search]
         const searchWord = ref("");
 
@@ -143,13 +156,23 @@ export default {
             }
         }
         // #endregion
-
-        
+       
         const markerClick = (restaurant) => {
             return () => {
                 console.log("클릭", restaurant)
             };
         }
+
+        // const paddingBottom = ref(false);
+        // const test = (goingToTop) => {
+        //     console.log(goingToTop,"goingToTop")
+        //     if (goingToTop) {
+        //         paddingBottom.value = true;
+        //     }
+        //     else {
+        //         paddingBottom.value = false;
+        //     }
+        // }
       
         onMounted(async () => {
             requestPositions();
@@ -158,6 +181,7 @@ export default {
         return {
             lunchMap,
             searchRestaurant,
+            showListLayer,
         }
     }
 }
