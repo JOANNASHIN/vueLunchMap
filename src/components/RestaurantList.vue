@@ -2,12 +2,12 @@
     <article 
         ref="restaurantListLayer" 
         class="fb__restaurants"  
+    >
+    <!--
         v-touch:drag="dragTouch" 
         v-touch:release="endTouch"
-    >
-    <!-- v-touch:press="startTouch" -->
+        v-touch:press="startTouch" -->
         <h2 class="fb__title--hidden">레스토랑 리스트 레이어</h2>
-        <div class="fb__restaurants__space" :class="isTouched ? 'max' : ''">빈 배경 공간</div>
 
         <div class="fb__restaurants__cont">
             <button class="fb__restaurants__touch">레이어 확대버튼</button>
@@ -40,8 +40,6 @@
                     <p class="fb__restaurants__empty">리스트가 없습니다.</p>
                 </template>
             </div>
-
-            <!-- <button class="fb__restaurants__close" @click="closeLayer()">지도보기</button> -->
         </div>
     </article>
 </template>
@@ -89,7 +87,7 @@ export default {
             console.log("openDetailLayer")
         }
 
-        const closeLayer = () => {
+        const closeDetailLayer = () => {
             // document.querySelector(".fb__restaurants__space")
         }
 
@@ -102,7 +100,8 @@ export default {
             isTouched,
             dragTouch,
             endTouch,
-            openDetailLayer
+            openDetailLayer,
+            closeDetailLayer
         }
     }
 }

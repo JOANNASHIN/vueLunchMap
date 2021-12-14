@@ -115,7 +115,7 @@ export default {
 
             if (positions && positions.length) {
                 positions.forEach(restaurant => {
-                    const content = `<span class="fb__restaurant__title">${restaurant.name}</span>`
+                    const content = `<span class="fb__map__mark">${restaurant.name}</span>`
                     const location = restaurant.location.split(",");
                     const marker = new kakao.maps.Marker({
                         map,
