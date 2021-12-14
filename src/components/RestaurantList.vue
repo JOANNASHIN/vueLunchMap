@@ -1,36 +1,40 @@
 <template>
     <template v-if="isMounted">
         <article ref="restaurantListLayer" class="fb__restaurants" v-touch:press="startTouch" v-touch:drag="dragTouch" v-touch:release="endTouch">
-            <h2 class="fb__title--hidden">레스토랑 리스트</h2>
-            <button class="fb__restaurants__touch">레이어 확대버튼</button>
+            <h2 class="fb__title--hidden">레스토랑 리스트 레이어</h2>
+            <div class="fb__restaurants__space">빈 배경 공간</div>
 
-            <div class="fb__restaurants__scroll">
-                <template v-if="restaurants && restaurants.length">
-                    <ul class="fb__restaurants__wrapper">
-                        <template v-for="(list, index) in restaurants" :key="index">
-                            <li class="fb__restaurants__list" @click.prevent="openDetailLayer()">
-                                <strong class="fb__restaurants__name">{{list.name}}</strong>
-                                
-                                <p class="fb__restaurants__desc">
-                                    <span>{{list.description}}</span>
-                                    <span>거리 {{list.howFar}}분</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
-                                    <span>별점 {{list.score}}점</span>
-                                </p>
+            <div class="fb__restaurants__cont">
+                <button class="fb__restaurants__touch">레이어 확대버튼</button>
 
-                                <template v-if="list.photo && list.photo.length">
-                                    <figure class="fb__restaurants__img">
-                                        <template v-for="(thumb, photoIndex) in list.photo" :key="`photo${photoIndex}`">
-                                                <img :src="thumb.src" alt="">
-                                        </template>
-                                    </figure>
-                                </template>
-                            </li>
-                        </template>
-                    </ul>
-                </template>
-                <template v-else>
-                    <p class="fb__restaurants__empty">리스트가 없습니다.</p>
-                </template>
+                <div class="fb__restaurants__scroll">
+                    <template v-if="restaurants && restaurants.length">
+                        <ul class="fb__restaurants__wrapper">
+                            <template v-for="(list, index) in restaurants" :key="index">
+                                <li class="fb__restaurants__list" @click.prevent="openDetailLayer()">
+                                    <strong class="fb__restaurants__name">{{list.name}}</strong>
+                                    
+                                    <p class="fb__restaurants__desc">
+                                        <span>{{list.description}}</span>
+                                        <span>거리 {{list.howFar}}분</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+                                        <span>별점 {{list.score}}점</span>
+                                    </p>
+
+                                    <template v-if="list.photo && list.photo.length">
+                                        <figure class="fb__restaurants__img">
+                                            <template v-for="(thumb, photoIndex) in list.photo" :key="`photo${photoIndex}`">
+                                                    <img :src="thumb.src" alt="">
+                                            </template>
+                                        </figure>
+                                    </template>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template v-else>
+                        <p class="fb__restaurants__empty">리스트가 없습니다.</p>
+                    </template>
+                </div>
             </div>
         </article>
     </template>
@@ -71,32 +75,32 @@ export default {
         let _moved = 0;
 
         const dragTouch = (e) => {
-            document.querySelector(".fb__restaurants").classList.remove("full");
-            document.querySelector(".fb__restaurants").classList.remove("down");
+            // document.querySelector(".fb__restaurants").classList.remove("full");
+            // document.querySelector(".fb__restaurants").classList.remove("down");
 
-            const _current = e.touches && e.touches.length ? e.touches[0].clientY : 0;
-            const _transformY = window.getComputedStyle(document.querySelector(".fb__restaurants")).transform;
+            // const _current = e.touches && e.touches.length ? e.touches[0].clientY : 0;
+            // const _transformY = window.getComputedStyle(document.querySelector(".fb__restaurants")).transform;
 
-            _transformYNumber = Number(_transformY.split(",") ? _transformY.split(",")[5].replace(/(px)?\)?/ig, ""): 0);
-            _moved = (_current - _prev) ;
+            // _transformYNumber = Number(_transformY.split(",") ? _transformY.split(",")[5].replace(/(px)?\)?/ig, ""): 0);
+            // _moved = (_current - _prev) ;
 
-            if ( _prev != 0 ) {
-                document.querySelector(".fb__restaurants").style.transform = `translate(0, ${_transformYNumber + _moved}px)`;
-            }
+            // if ( _prev != 0 ) {
+            //     document.querySelector(".fb__restaurants").style.transform = `translate(0, ${_transformYNumber + _moved}px)`;
+            // }
 
-            _prev = _current;
+            // _prev = _current;
         }
 
         const endTouch = (e) => {
-            if (_moved < 0) {
-                document.querySelector(".fb__restaurants").classList.remove("down");
-                document.querySelector(".fb__restaurants").classList.add("full");
-            }
-            else {
-                document.querySelector(".fb__restaurants").classList.remove("full")
-                document.querySelector(".fb__restaurants").classList.add("down");
-            }
-            _prev = 0;
+            // if (_moved < 0) {
+            //     document.querySelector(".fb__restaurants").classList.remove("down");
+            //     document.querySelector(".fb__restaurants").classList.add("full");
+            // }
+            // else {
+            //     document.querySelector(".fb__restaurants").classList.remove("full")
+            //     document.querySelector(".fb__restaurants").classList.add("down");
+            // }
+            // _prev = 0;
             // console.log("endTouch", e.changedTouches[0].clientY)
         }
 

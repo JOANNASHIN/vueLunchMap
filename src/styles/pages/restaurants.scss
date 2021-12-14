@@ -1,32 +1,33 @@
 .fb {
     &__restaurants {
+        overflow: auto;
         position: fixed;
-        top: 50%;
+        top: 0;
         left: 0;
         z-index: 5;
         width: 100%;
         height: 100%;
-        padding: rem(25px 0 0);
-        background: #fff;
-        border-top-left-radius: rem(6px);
-        border-top-right-radius: rem(6px);
-        box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
-        transform: translate(0, 0);
+       
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
-        &.full {
-            transform: translate(0, -40%) !important;
+        &__space {
+            height: 60%;
+            font-size: 0;
 
-            .fb__restaurants__scroll {
-                overflow: auto;
+            &.max {
+                height: 80%;
             }
         }
 
-        &.down {
-            transform: translate(0, 0) !important;
-
-            .fb__restaurants__scroll {
-                overflow: hidden;
-            }
+        &__cont {
+            position: relative;
+            padding: rem(25px 0 0);
+            background: #fff;
+            border-top-left-radius: rem(6px);
+            border-top-right-radius: rem(6px);
+            box-shadow: rem(0 0 10px 4px) rgba(0, 0, 0, 0.2);
         }
 
         &__touch {
@@ -52,13 +53,10 @@
         }
 
         &__scroll {
-            overflow: hidden;
             height: 100%;
             padding: rem(0 0 40px);
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
+           
         }
 
         &__list {
