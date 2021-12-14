@@ -7,22 +7,23 @@
         z-index: 5;
         width: 100%;
         height: 100%;
-       
+
         &::-webkit-scrollbar {
             display: none;
         }
 
         &__space {
-            height: 60%;
+            min-height: 70%;
             font-size: 0;
 
-            &.max {
-                height: 80%;
+            &.max { 
+                min-height: 90%;
             }
         }
 
         &__cont {
             position: relative;
+            min-height: 30%;
             padding: rem(25px 0 0);
             background: #fff;
             border-top-left-radius: rem(6px);
