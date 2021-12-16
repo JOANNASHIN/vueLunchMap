@@ -5,19 +5,19 @@
         <!-- 레이어 -->
         <div 
             class="fb__restaurants__layer" 
-            :style="`transform: translateY(${transPos}rem)`"
+            :style="`transform: translateY(${transY}rem)`"
             v-touch:drag="controlDrag"
             v-touch:release="controlTouchEnd"
         >
             <button
                 class="fb__restaurants__touch"
-                v-touch:drag="floatingTopSwipe"
-                v-touch:swipe="floatingTopSwipe"
-            >
-                레이어 상단 버튼
-            </button>
+                v-touch:swipe="controlSwipe"
+                >레이어 상단 버튼</button>
 
-            <ul class="fb__restaurants__wrapper">
+<!-- @scroll.prevent="insideScrolling($event)" -->
+            <ul class="fb__restaurants__wrapper"
+                @scroll.prevent="insideScrolling"  
+                v-touch:release="insideScrollingEnd">
                 <template v-if="restaurants && restaurants.length">
                     <template v-for="(list, index) in restaurants" :key="index">
                         <li class="fb__restaurants__list" @click.prevent="openDetailLayer()">
@@ -55,87 +55,102 @@ import { connectDatabase } from "../composables/connectDatabase";
 
 export default {
     name: "RestaurantList",
-
     props: {
         
     },
-
     setup(props, { emit }) {
         const store = useStore();
         const { emitter, selectedMenu } = store.state;
         const { fetchRestaurantList } = connectDatabase();
-        
-        let isGoingUp = true;
-        let scrollPrev = 0;
-        let scrollMoved = 0;
-        let innerScrollAble = ref(false);
 
-        //레이어 위치
-        const transY = ref(500);
-        const transPos = computed(() => {
-            return transY.value / 16;
+
+
+        // 여기서부터 테스트
+        const _screen = window.innerHeight;
+        const _default = _screen - 150;
+        const _min = _screen - 40; //최소;
+        const _max = 60; //header 뺀 최대
+
+        console.log(_screen, _default, _min, _max)
+
+        //위치 정하기
+        const layerPositionType = ref(_default);
+
+        const transY = computed(() => {
+            console.log("test")
+            return layerPositionType.value / 16;
         });
         
-        //레이어 상단 터치 시
-        const floatingTopSwipe = () => {
-            if (isGoingUp && innerScrollAble.value) {
-                const contscrollEl = document.querySelector(".fb__restaurants__wrapper");
-                contscrollEl.style.height = "100%";
-                contscrollEl.style.overflow="hidden";
-                
-                //스크롤 리셋
-                scrollPrev = 0;
-                innerScrollAble.value = false;
+
+        let flag = false;
+        const insideScrolling = () => {
+            console.log("안에 스크롤중")
+
+            flag = true;
+        }
+
+         const insideScrollingEnd = () => {
+            console.log("안에 끝")
+            setTimeout(() => {
+                flag = false;
+            }, 1)
+        }
+
+        ///////
+
+        //드래그일때
+        let isGoingUp = true;
+        let scrollPrev = 0;
+        const controlDrag = (e) => {
+            const _current = e.touches[0].clientY;
+            if (_current >= scrollPrev) {
+                console.log("내려가는중")
+                //내려가는중
                 isGoingUp = false;
             }
-        }
-
-        const _screen = window.innerHeight;
-
-        //드래그 하면서 플로팅 값 바꿔줌
-        const controlDrag = (e) => {
-            //내부 스크롤일때는 return
-            if (innerScrollAble.value == true) return ;
-
-            const _current = e.touches[0].clientY;
-
-            //이동한 만큼 transformY 이동
-            scrollMoved = _current - scrollPrev;
-            if (scrollPrev != 0) {
-                transY.value = transY.value + scrollMoved;
+            else {
+                console.log("올라가는중")
+                isGoingUp = true;
             }
 
-            //영역 기준
-            // const fromHere = _screen / 2;
-            // if (_current >= fromHere) isGoingUp = false;
-            // else isGoingUp = true;
-
-            //스와이프 기준
-            if (_current >= scrollPrev) isGoingUp = false;
-            else isGoingUp = true;
-            
             scrollPrev = _current;
+
         }
 
-        //끝나면 위로했는지 아래로 했는지 체크해서 고정시키기
         const controlTouchEnd = (e) => {
-            const contscrollEl = document.querySelector(".fb__restaurants__wrapper");
-            const headerEl = document.querySelector(".fb__map__header");
+            if (flag) return ;
+            //밖에 스크롤 없애기
+            const scrollEl = document.querySelector(".js__list__scroll");
+            const innerScrollEl = document.querySelector(".fb__restaurants__wrapper");
 
             if (isGoingUp) {
-                transY.value = 60;
-                innerScrollAble.value = true; //안에 터치 가능으로 변경
-                contscrollEl.style.overflow="auto";
-                contscrollEl.style.height = `${_screen - headerEl.offsetHeight- headerEl.offsetHeight / 1.5}px`;
+                scrollEl.scrollTop = 0;
+                scrollEl.style.overflow = "hidden";
+                layerPositionType.value = _max;
+                innerScrollEl.style.overflow = "auto";
+                innerScrollEl.style.height = `${(_screen - 100) / 16}rem`;
+
             }
             else {
-                transY.value = 500;
-                contscrollEl.style.overflow="hidden";
+                scrollEl.scrollTop = 0;
+                scrollEl.style.overflow = "auto";
+                layerPositionType.value = _min;
+                innerScrollEl.style.overflow = "hidden";
+                innerScrollEl.style.height = `${(_screen - 100) / 16}rem`;
             }
 
-            scrollPrev = 0;
         }
 
+
+
+
+
+        // 여기까지 테스트 끝
+
+        
+        
+        
+        
         
         //목록 보기 (레이어 열기)
         emitter.on('show-list-layer', () => {
@@ -161,6 +176,7 @@ export default {
         const requestPositions = async () => {
             const response = await fetchRestaurantList();
             restaurants.value= response;
+
         }
 
         const openDetailLayer = () => {
@@ -175,11 +191,14 @@ export default {
 
         return {
             transY,
-            transPos,
-            innerScrollAble,
-            controlDrag,
-            controlTouchEnd,
-            floatingTopSwipe,
+            layerPositionType,
+
+
+insideScrolling,
+insideScrollingEnd,
+controlDrag,
+controlTouchEnd,
+
 
 
 

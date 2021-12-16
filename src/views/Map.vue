@@ -2,8 +2,12 @@
     <section class="fb__map">
         <h2 class="fb__title--hidden">지도 페이지</h2>
         <MapHeader @search:restaurant="searchRestaurant($event)"></MapHeader>
-        <RestaurantList></RestaurantList>
-        <div ref="lunchMap" class="fb__map__container"></div>
+        <RestaurantList @direction-to="directionTo($event)"></RestaurantList>
+
+        <figure class="fb__map__area" :class="isGoingBottom ? 'bottom' : ''">
+            <div ref="lunchMap" class="fb__map__container">지도</div>
+        </figure>
+
         <button class="fb__restaurants__open" @click="showListLayer()">목록보기</button>
     </section>
 </template>
@@ -29,10 +33,15 @@ export default {
         const { emitter } = store.state;
 
         const showListLayer = () => {
-            emitter.emit('show-list-layer')
+            emitter.emit('show-list-layer');
         }
         
+        const isGoingBottom = ref(false);
 
+        const directionTo = (direction) => {
+            if (direction == "down") isGoingBottom.value = true;
+            else isGoingBottom.value = false;
+        }
 
 
         // #region [search]
@@ -96,7 +105,7 @@ export default {
             markerImage = new kakao.maps.MarkerImage(markerSrc, new kakao.maps.Size(markerSize)); 
             map = new kakao.maps.Map(mapContainer, {
                 center: new kakao.maps.LatLng(centeredPosition[0], centeredPosition[1]),
-                level: 4
+                level: 5
             })
 
             drawMarkers();
@@ -182,6 +191,8 @@ export default {
             lunchMap,
             searchRestaurant,
             showListLayer,
+            directionTo,
+            isGoingBottom
         }
     }
 }

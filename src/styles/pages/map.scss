@@ -1,3 +1,4 @@
+
 .fb {
     &.Map {
         overflow: hidden;
@@ -12,13 +13,15 @@
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
+            overflow: hidden;
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1;
             width: 100%;
+            height: rem(60px);
+            padding: rem(10px 16px);
             // background-color: $white;
-            padding: rem(12px 16px);
             // box-shadow: rem(0 0 4px 2px) rgba(0, 0, 0, 0.2);
 
         }
@@ -72,17 +75,22 @@
             }
         }
 
-        &__container {
-            position: fixed !important;
+        &__area {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            // height: 60vh;
             height: 100%;
+            font-size: 0;
 
-            &.paddingBottom {
-                height: 60%;
+            &.bottom {
+                // padding-bottom: rem(100px);
             }
+        }
+
+        &__container {
+            width: 100%;
+            height: 100%;
         }
 
         &__mark {

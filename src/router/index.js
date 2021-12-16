@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Map from "../views/Map.vue";
+import ScrollTest from "../views/ScrollTest.vue";
 import NotFound from "../views/NotFound.vue";
 import VueBodyClass from 'vue-body-class';
 
@@ -16,6 +17,12 @@ const routes = [
       name: "map",
       component: Map,
       meta: { bodyClass: 'Map'}
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: ScrollTest,
+    meta: { bodyClass: 'ScrollTest'}
   },
   {
     path: "/:catchAll(.*)",
