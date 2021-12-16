@@ -8,7 +8,6 @@
             <div ref="lunchMap" class="fb__map__container">지도</div>
         </figure>
 
-        <button class="fb__restaurants__open" @click="showListLayer()">목록보기</button>
     </section>
 </template>
 

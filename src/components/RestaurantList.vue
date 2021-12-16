@@ -1,10 +1,10 @@
 <template>
-    <article class="fb__restaurants js__list__scroll">
+    <article class="fb__restaurants">
         <h2 class="fb__title--hidden">레스토랑 리스트 레이어</h2>
 
         <!-- 레이어 -->
         <div 
-            class="fb__restaurants__layer" 
+            class="fb__restaurants__layer"
             :style="`transform: translateY(${transPos}rem)`"
             v-touch:drag="controlDrag"
             v-touch:release="controlTouchEnd"
@@ -17,7 +17,10 @@
                 레이어 상단 버튼
             </button>
 
-            <ul class="fb__restaurants__wrapper">
+            <ul 
+                class="fb__restaurants__wrapper"
+                :style="customStyle"
+            >
                 <template v-if="restaurants && restaurants.length">
                     <template v-for="(list, index) in restaurants" :key="index">
                         <li class="fb__restaurants__list" @click.prevent="openDetailLayer()">
@@ -75,13 +78,28 @@ export default {
         const transPos = computed(() => {
             return transY.value / 16;
         });
+
+        const _screen = window.innerHeight;
+        const scrollType = ref("layer"); // layer / inner
+        const customStyle = computed(() => {
+            const headerEl = document.querySelector(".fb__map__header");
+
+            //레이어 스크롤
+            if (scrollType.value == "layer") {
+                return `overflow: hidden; height: 100%;`;
+            }
+            //내부 스크롤
+            else if (scrollType.value == "inner") {
+                return `overflow: auto; height: ${_screen - headerEl.offsetHeight - headerEl.offsetHeight / 1.5}px;`;
+            }
+
+            return '';
+        })
         
         //레이어 상단 터치 시
         const floatingTopSwipe = () => {
             if (isGoingUp && innerScrollAble.value) {
-                const contscrollEl = document.querySelector(".fb__restaurants__wrapper");
-                contscrollEl.style.height = "100%";
-                contscrollEl.style.overflow="hidden";
+                scrollType.value = "layer";
                 
                 //스크롤 리셋
                 scrollPrev = 0;
@@ -90,7 +108,6 @@ export default {
             }
         }
 
-        const _screen = window.innerHeight;
 
         //드래그 하면서 플로팅 값 바꿔줌
         const controlDrag = (e) => {
@@ -119,41 +136,18 @@ export default {
 
         //끝나면 위로했는지 아래로 했는지 체크해서 고정시키기
         const controlTouchEnd = (e) => {
-            const contscrollEl = document.querySelector(".fb__restaurants__wrapper");
-            const headerEl = document.querySelector(".fb__map__header");
-
             if (isGoingUp) {
                 transY.value = 60;
                 innerScrollAble.value = true; //안에 터치 가능으로 변경
-                contscrollEl.style.overflow="auto";
-                contscrollEl.style.height = `${_screen - headerEl.offsetHeight- headerEl.offsetHeight / 1.5}px`;
+                scrollType.value = "inner";
             }
             else {
                 transY.value = 500;
-                contscrollEl.style.overflow="hidden";
+                scrollType.value = "layer";
             }
 
             scrollPrev = 0;
         }
-
-        
-        //목록 보기 (레이어 열기)
-        emitter.on('show-list-layer', () => {
-            const listLayerEl = document.querySelector(".js__list__scroll");
-            const _screenHeight = window.innerHeight;
-            const _top = listLayerEl.scrollTop;
-
-            let _pos = 0;
-
-            const layerUp = setInterval(() => {
-                if (_top + _pos > _screenHeight / 2) clearInterval(layerUp);
-
-                _pos += 5;
-                listLayerEl.scrollTo(0, _pos);
-            }, 1)
-
-        })
-      
 
         //레스토랑 리스트
         const restaurants = ref([]);
@@ -174,9 +168,9 @@ export default {
         requestPositions();
 
         return {
-            transY,
             transPos,
-            innerScrollAble,
+            customStyle,
+
             controlDrag,
             controlTouchEnd,
             floatingTopSwipe,
