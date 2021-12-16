@@ -59,10 +59,6 @@ import { connectDatabase } from "../composables/connectDatabase";
 export default {
     name: "RestaurantList",
 
-    props: {
-        
-    },
-
     setup(props, { emit }) {
         const store = useStore();
         const { emitter, selectedMenu } = store.state;
@@ -80,26 +76,22 @@ export default {
         });
 
         const _screen = window.innerHeight;
-        const scrollType = ref("layer"); // layer / inner
         const customStyle = computed(() => {
             const headerEl = document.querySelector(".fb__map__header");
 
-            //레이어 스크롤
-            if (scrollType.value == "layer") {
-                return `overflow: hidden; height: 100%;`;
-            }
             //내부 스크롤
-            else if (scrollType.value == "inner") {
+            if (innerScrollAble.value) {
                 return `overflow: auto; height: ${_screen - headerEl.offsetHeight - headerEl.offsetHeight / 1.5}px;`;
             }
-
-            return '';
+            //내부 스크롤 금지
+            else {
+                return `overflow: hidden; height: 100%;`;
+            }
         })
         
         //레이어 상단 터치 시
         const floatingTopSwipe = () => {
             if (isGoingUp && innerScrollAble.value) {
-                scrollType.value = "layer";
                 
                 //스크롤 리셋
                 scrollPrev = 0;
@@ -138,12 +130,11 @@ export default {
         const controlTouchEnd = (e) => {
             if (isGoingUp) {
                 transY.value = 60;
-                innerScrollAble.value = true; //안에 터치 가능으로 변경
-                scrollType.value = "inner";
+                innerScrollAble.value = true;
             }
             else {
                 transY.value = 500;
-                scrollType.value = "layer";
+                innerScrollAble.value = false;
             }
 
             scrollPrev = 0;
