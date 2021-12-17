@@ -5,7 +5,12 @@
             <fieldset class="search__wrapper">
                 <legend>음식/ 음식점 검색하기</legend>
 
-                <input ref="searchInput" type="search" class="search__input" placeholder="음식명 또는 음식점을 검색해보세요." v-model="searchText">
+                <input 
+                    ref="searchInput" 
+                    type="search" 
+                    class="search__input" 
+                    placeholder="음식명 또는 음식점을 검색해보세요." 
+                    v-model="searchText">
                 <button type="submit" class="search__button">검색버튼</button>
             </fieldset>
         </form>
@@ -27,7 +32,6 @@ export default {
 
 
         const searchInit = () => {
-            if (searchInput.value) searchInput.value.blur();
             emit("search:restaurant", searchText.value);
         }
 
