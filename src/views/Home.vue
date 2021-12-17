@@ -3,7 +3,9 @@
         <h2 class="fb__title--hidden">점심추천 메인페이지</h2>
 
         <template v-if="false === fetches.getMenuData">
-            loading...
+            <span class="fb__loading">
+                loading...
+            </span>
         </template>
 
         <template v-else-if="true === fetches.getMenuData">
@@ -134,7 +136,6 @@ export default {
         }
 
         const setSelectedMenu = (randomCount) => {
-            // console.log(menuList.value[randomCount], randomCount)
             selectedMenu.value = menuList.value[randomCount];
 
             store.dispatch("saveSelectedMenu", selectedMenu.value)

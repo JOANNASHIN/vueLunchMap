@@ -5,4 +5,18 @@
             line-height: 0;
         }   
     }
+
+    &__loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 100;
+        width: rem(30px);
+        height: rem(30px);
+        margin: auto;
+        background: url("~@/assets/images/common/loading.gif") no-repeat center center / 100% auto;
+        font-size: 0;
+    }
 }
