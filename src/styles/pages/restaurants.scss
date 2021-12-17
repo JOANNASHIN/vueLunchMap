@@ -79,6 +79,23 @@
             @include fontcss($dark, 200, rem(13px), 1.2);
         }
 
+        &__menus {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: rem(10px);
+
+            .menus {
+                &__name {
+                    padding: rem(3px 6px);
+                    background: $yellow;
+                    border-radius: rem(10px);
+                    margin: rem(0 2px 2px 0);
+                    @include fontcss($bluedark, 400, rem(12px), 1.2);
+                }
+            }
+        }
+
         &__img {
             overflow-x: auto;
             display: block;
@@ -104,6 +121,12 @@
             border-radius: rem(20px);
             @include fontcss($bluedark, bold, rem(12px), 1.2);
             transform: translate(-50%, 0);
+        }
+
+        &__empty {
+            padding-top: rem(20px);
+            @include fontcss($bluedark, 400, rem(14px), 1.5);
+            text-align: center;
         }
     }
 }

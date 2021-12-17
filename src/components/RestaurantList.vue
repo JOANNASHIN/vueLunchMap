@@ -1,11 +1,11 @@
 <template>
     <article class="fb__restaurants">
-        <h2 class="fb__title--hidden">레스토랑 리스트 레이어</h2>
+        <h2 class="fb__title--hidden">음식점 리스트 레이어</h2>
 
         <!-- 레이어 -->
         <div 
             class="fb__restaurants__layer"
-            :style="`transform: translateY(${transPos}rem)`"
+            :style="`transform: translateY(${transPos}rem); min-height:${layerMinHeight}rem;`"
             v-touch:drag="controlDrag"
             v-touch:release="controlTouchEnd"
         >
@@ -32,6 +32,12 @@
                                 <span>별점 {{list.score}}점</span>
                             </p>
 
+                            <ul class="fb__restaurants__menus">
+                                <template v-for="(menu, menuIdx) in list.menu" :key="`menu${menuIdx}`">
+                                    <li class="menus__name">{{menu.name}}</li>
+                                </template>
+                            </ul>
+
                             <template v-if="list.photo && list.photo.length">
                                 <figure class="fb__restaurants__img">
                                     <template v-for="(thumb, photoIndex) in list.photo" :key="`photo${photoIndex}`">
@@ -44,7 +50,9 @@
                 </template>
 
                 <template v-else>
-                    <p class="fb__restaurants__empty">리스트가 없습니다.</p>
+                    <p class="fb__restaurants__empty">
+                        리스트가 없습니다.
+                    </p>
                 </template>
             </ul>
         </div>
@@ -61,9 +69,10 @@ export default {
 
     setup(props, { emit }) {
         const store = useStore();
-        const { emitter, selectedMenu } = store.state;
+        const { emitter, selectedMenu, matchedRests } = store.state;
         const { fetchRestaurantList } = connectDatabase();
-        
+
+        //#region 스크롤 관련
         let isGoingUp = true;
         let scrollPrev = 0;
         let scrollMoved = 0;
@@ -74,14 +83,22 @@ export default {
         const transPos = computed(() => {
             return transY.value / 16;
         });
-
+       
         const _screen = window.innerHeight;
+
+        //레이어 minHeight설정
+        const minHeight = ref(_screen - 500);
+        const layerMinHeight = computed(() => {
+            return minHeight.value / 16;
+        });
+
         const customStyle = computed(() => {
             const headerEl = document.querySelector(".fb__map__header");
+            const touchEl = document.querySelector(".fb__restaurants__touch");
 
             //내부 스크롤
             if (innerScrollAble.value) {
-                return `overflow: auto; height: ${_screen - headerEl.offsetHeight - headerEl.offsetHeight / 1.5}px;`;
+                return `overflow: auto; height: ${_screen - headerEl.offsetHeight - touchEl.offsetHeight}px;`;
             }
             //내부 스크롤 금지
             else {
@@ -131,14 +148,18 @@ export default {
             if (isGoingUp) {
                 transY.value = 60;
                 innerScrollAble.value = true;
+                minHeight.value = _screen - 60;
             }
             else {
                 transY.value = 500;
                 innerScrollAble.value = false;
+                minHeight.value = _screen - 500;
             }
 
             scrollPrev = 0;
         }
+
+        //#endregion 스크롤 관련
 
         //레스토랑 리스트
         const restaurants = ref([]);
@@ -146,6 +167,18 @@ export default {
         const requestPositions = async () => {
             const response = await fetchRestaurantList();
             restaurants.value= response;
+        }
+
+        //검색단어 있을 시
+        emitter.on('updateMatchedRests', rests => {
+            restaurants.value = rests;
+        });
+
+        if (matchedRests && matchedRests.length) {
+            restaurants.value = matchedRests;
+        }
+        else {
+            requestPositions();
         }
 
         const openDetailLayer = () => {
@@ -156,18 +189,13 @@ export default {
             // document.querySelector(".fb__restaurants__space")
         }
 
-        requestPositions();
-
         return {
             transPos,
             customStyle,
-
+            layerMinHeight,
             controlDrag,
             controlTouchEnd,
             floatingTopSwipe,
-
-
-
 
             selectedMenu,
             restaurants,

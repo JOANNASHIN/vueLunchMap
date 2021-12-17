@@ -31,9 +31,9 @@ export default {
         const store = useStore();
         const { emitter } = store.state;
 
-        const showListLayer = () => {
-            emitter.emit('show-list-layer');
-        }
+        // const showListLayer = () => {
+        //     emitter.emit('show-list-layer');
+        // }
         
         const isGoingBottom = ref(false);
 
@@ -97,6 +97,8 @@ export default {
         let markerImage = null;
         let map = null;
 
+
+        //지도그리기
         const drawMap = () => {
             const mapContainer = lunchMap.value;
             const { markerSrc, markerSize, center} = defaultMapData;
@@ -130,13 +132,24 @@ export default {
 
             //검색단어 있을 경우
             if (searchWord.value != "") {
+                //마커 리셋
                 removeMarkers();
-                positions = positionList.filter(v => v.name.indexOf(searchWord.value) != -1);
+                 
+                //조건에 부합하는 마커 분류
+                positions = positionList.filter(v => {
+                    if (v.name.indexOf(searchWord.value) != -1) return v; //음식점명에서 찾기
+                    else return v.menu.some(menu => menu.name.indexOf(searchWord.value) != -1) //메뉴명에서 찾기
+                });
+
+                //맞는 레스토랑 업데이트
+                emitter.emit('updateMatchedRests', positions);
             }
 
+            // store.dispatch("saveMatchedRests", positions);
+
             if (positions && positions.length) {
-                positions.forEach(restaurant => {
-                    const content = `<span class="fb__map__mark">${restaurant.name}</span>`
+                positions.forEach((restaurant, idx) => {
+                    const content = `<span class="fb__map__marker">${restaurant.name}</span>`
                     const location = restaurant.location.split(",");
                     const marker = new kakao.maps.Marker({
                         map,
@@ -149,15 +162,18 @@ export default {
                         map,
                         content,
                         position: new kakao.maps.LatLng(location[0], location[1]),
-                        xAnchor: 0.45,
-                        yAnchor: -1.5
+                        xAnchor: 0.35,
+                        yAnchor: -3.6
                     });
     
-                    //
+                    //센터 이동
+                    if (idx == 0) map.setCenter(new kakao.maps.LatLng(location[0], location[1]));
+
+                    //마커 그리기
                     marker.setMap(map)
                     kakao.maps.event.addListener(marker, 'click', markerClick(restaurant));
 
-                    //
+                    //마커 data 세팅
                     markers.push(marker);
                     customOverlays.push(customOverlay);
                 })
@@ -171,17 +187,6 @@ export default {
             };
         }
 
-        // const paddingBottom = ref(false);
-        // const test = (goingToTop) => {
-        //     console.log(goingToTop,"goingToTop")
-        //     if (goingToTop) {
-        //         paddingBottom.value = true;
-        //     }
-        //     else {
-        //         paddingBottom.value = false;
-        //     }
-        // }
-      
         onMounted(async () => {
             requestPositions();
         })
@@ -189,7 +194,7 @@ export default {
         return {
             lunchMap,
             searchRestaurant,
-            showListLayer,
+            // showListLayer,
             directionTo,
             isGoingBottom
         }

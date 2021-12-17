@@ -8,7 +8,7 @@ export const connectDatabase = () => {
             try {
                 const customData = [];
                 
-                store.state.resCollection.get().then(result => {
+                store.state.restCollection.get().then(result => {
                     result.forEach(list => {
                         customData.push(Object.assign(list.data(), {
                             id: list.id

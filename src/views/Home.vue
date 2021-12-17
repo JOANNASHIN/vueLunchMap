@@ -26,7 +26,7 @@
                             </ul>
                     </div>
 
-                    <span class="recommend__text">먹을까요?</span>
+                    <span class="recommend__text" v-text="!fetches.menuRolling ? '먹을까요?' : '어떠세요?'"></span>
                 </div>
 
                 <nav class="fb__main__nav">
@@ -112,9 +112,12 @@ export default {
         };
 
         const makeRollingSlider = () => {
-             rollingSlide = new Swiper(".recommend__rolling", {
+            // @TODO: STORE에 있는 값 저장해서 다시 뿌리기
+            // const randomCount = store.state.selectedMenu ? store.state.selectedMenu.randomCount : 0;
+            rollingSlide = new Swiper(".recommend__rolling", {
                 loop: true,
                 slidesPerView: 1,
+                // initialSlide: randomCount,
                 direction: "vertical",
                 allowTouchMove: false,
             })
@@ -138,6 +141,10 @@ export default {
         const setSelectedMenu = (randomCount) => {
             selectedMenu.value = menuList.value[randomCount];
 
+            Object.assign(selectedMenu.value, {
+                randomCount
+            })
+
             store.dispatch("saveSelectedMenu", selectedMenu.value)
         }
 
@@ -145,7 +152,6 @@ export default {
 
         })
 
-        getMenuData();
         
         return {
             fetches,

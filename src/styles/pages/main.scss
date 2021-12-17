@@ -16,7 +16,7 @@
             .recommend {
                 &__text {
                     display: block;
-                    @include fontcss($black, 200, rem(30px), 1.2);
+                    @include fontcss($black, 200, rem(26px), 1.2);
                 }
 
                 &__rolling {
@@ -32,7 +32,7 @@
                 &__menu {
                     display: block;
                     padding: rem(14px 0);
-                    @include fontcss($bluedark, 400, rem(30px), 1.2);
+                    @include fontcss($bluedark, 600, rem(32px), 1.2);
 
                     &--before {
                         position: relative;
