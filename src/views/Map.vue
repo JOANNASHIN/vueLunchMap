@@ -1,47 +1,55 @@
 <template>
     <section class="fb__map">
         <h2 class="fb__title--hidden">지도 페이지</h2>
-        <MapHeader @search:restaurant="searchRestaurant($event)"></MapHeader>
-        <RestaurantList @direction-to="directionTo($event)"></RestaurantList>
 
-        <figure class="fb__map__area" :class="isGoingBottom ? 'bottom' : ''">
+        <!-- map header(search) -->
+        <MapHeader 
+            @search:restaurant="searchRestaurant($event)"
+        ></MapHeader>
+
+        <!-- restaurant list layer -->
+        <ListLayer 
+            @open-detail-layer="openDetailLayer($event)"
+        ></ListLayer>
+      
+        <!-- map container -->
+        <figure class="fb__map__area">
             <div ref="lunchMap" class="fb__map__container">지도</div>
         </figure>
 
+        <!-- restaurant detail layer -->
+        <DetailLayer 
+            v-if="isDetailLayerShow"
+            v-model:restaurant="detailRestaurant"
+            @close-detail-layer="closeDetailLayer"
+        ></DetailLayer>
     </section>
 </template>
 
 <script>
-import { ref, onMounted, watch, watchEffect } from "vue";
+import { ref, reactive, onMounted, watch, watchEffect } from "vue";
 import { useStore } from "vuex";
 import { connectDatabase } from "../composables/connectDatabase";
 import MapHeader from "../components/MapHeader";
-import RestaurantList from "../components/RestaurantList";
+import ListLayer from "../components/ListLayer";
+import DetailLayer from "@/components/DetailLayer.vue";
 
 export default {
     name: "Map",
 
     components: {
         MapHeader,
-        RestaurantList
+        ListLayer,
+        DetailLayer
     },
     
     setup() {
-        //연습장
         const store = useStore();
         const { emitter } = store.state;
 
-        // const showListLayer = () => {
-        //     emitter.emit('show-list-layer');
-        // }
-        
-        const isGoingBottom = ref(false);
-
-        const directionTo = (direction) => {
-            if (direction == "down") isGoingBottom.value = true;
-            else isGoingBottom.value = false;
-        }
-
+        onMounted(async () => {
+            requestPositions();
+        })
 
         // #region [search]
         const searchWord = ref("");
@@ -181,22 +189,34 @@ export default {
         }
         // #endregion
        
+        // #region [detail layer]
         const markerClick = (restaurant) => {
             return () => {
-                console.log("클릭", restaurant)
+                openDetailLayer(restaurant);
             };
         }
 
-        onMounted(async () => {
-            requestPositions();
-        })
+        const detailRestaurant = reactive({});
+        const isDetailLayerShow = ref(false);
+
+        const openDetailLayer = (target) => {
+            detailRestaurant.value = target;
+            isDetailLayerShow.value = true;
+        }
+
+         const closeDetailLayer = () => {
+            isDetailLayerShow.value = false;
+        }
+        // #endregion
 
         return {
             lunchMap,
             searchRestaurant,
-            // showListLayer,
-            directionTo,
-            isGoingBottom
+
+            detailRestaurant,
+            isDetailLayerShow,
+            openDetailLayer,
+            closeDetailLayer
         }
     }
 }

@@ -9,9 +9,9 @@
                     ref="searchInput" 
                     type="search" 
                     class="search__input" 
-                    placeholder="음식명 또는 음식점을 검색해보세요." 
+                    placeholder="음식명 또는 음식점을 검색해보세요."
                     v-model="searchText">
-                <button type="submit" class="search__button">검색버튼</button>
+                <button type="submit" class="search__button" @click="searchInit($event)">검색버튼</button>
             </fieldset>
         </form>
     </header>
@@ -32,7 +32,10 @@ export default {
 
 
         const searchInit = () => {
+            // TODO: 검색할때 STORE에 저장하든 업데이트하기
+            if (searchInput.value) searchInput.value.blur();
             emit("search:restaurant", searchText.value);
+            return false;
         }
 
         if (selectedMenu) {
@@ -41,6 +44,7 @@ export default {
         }
 
         return {
+            searchInput,
             searchText,
             searchInit
         }

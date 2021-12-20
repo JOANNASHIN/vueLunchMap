@@ -1,8 +1,14 @@
 .fb {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
     &__main {
+        -webkit-overflow-scrolling: touch;
         display: flex;
         align-items: center;
         position: relative;
+        width: 100%;
         height: 100%;
         background: $pcolor;
 

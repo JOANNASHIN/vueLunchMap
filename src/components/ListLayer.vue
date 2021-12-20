@@ -1,72 +1,82 @@
 <template>
-    <article class="fb__restaurants">
+    <article 
+        class="fb__layer"
+        :style="`transform: translateY(${transPos}rem); min-height:${layerMinHeight}rem;`"
+        v-touch:drag="controlDrag"
+        v-touch:release="controlTouchEnd"
+    >
         <h2 class="fb__title--hidden">음식점 리스트 레이어</h2>
 
-        <!-- 레이어 -->
-        <div 
-            class="fb__restaurants__layer"
-            :style="`transform: translateY(${transPos}rem); min-height:${layerMinHeight}rem;`"
-            v-touch:drag="controlDrag"
-            v-touch:release="controlTouchEnd"
+        <button
+            class="fb__layer__touch"
+            v-touch:drag="floatingTopSwipe"
+            v-touch:swipe="floatingTopSwipe"
         >
-            <button
-                class="fb__restaurants__touch"
-                v-touch:drag="floatingTopSwipe"
-                v-touch:swipe="floatingTopSwipe"
-            >
-                레이어 상단 버튼
-            </button>
+            레이어 상단 버튼
+        </button>
 
-            <ul 
-                class="fb__restaurants__wrapper"
-                :style="customStyle"
-            >
-                <template v-if="restaurants && restaurants.length">
-                    <template v-for="(list, index) in restaurants" :key="index">
-                        <li class="fb__restaurants__list" @click.prevent="openDetailLayer()">
-                            <strong class="fb__restaurants__name">{{list.name}}</strong>
-                            
-                            <p class="fb__restaurants__desc">
-                                <span>{{list.description}}</span>
-                                <span>거리 {{list.howFar}}분</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
-                                <span>별점 {{list.score}}점</span>
-                            </p>
+        <!-- 리스트 -->
+        <ul 
+            class="fb__layer__wrapper"
+            :style="customStyle"
+        >
+            <template v-if="restaurants && restaurants.length">
+                <template v-for="(list, index) in restaurants" :key="index">
+                    <li class="fb__layer__list" @click.prevent="openDetailLayer(list)">
+                        <strong class="fb__layer__name">{{list.name}}</strong>
+                        
+                        <p class="fb__layer__info">
+                            <span>걸어서 약 {{list.howFar}}분</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+                            <span>별점 {{list.score}}점</span>
+                        </p>
 
-                            <ul class="fb__restaurants__menus">
-                                <template v-for="(menu, menuIdx) in list.menu" :key="`menu${menuIdx}`">
+                        <p class="fb__layer__desc">{{list.description}}</p>
+
+                        <ul class="fb__layer__menus">
+                            <template v-for="(menu, menuIdx) in list.menu" :key="`menu${menuIdx}`">
+                                <template v-if="menuIdx < 5">
                                     <li class="menus__name">{{menu.name}}</li>
                                 </template>
-                            </ul>
-
-                            <template v-if="list.photo && list.photo.length">
-                                <figure class="fb__restaurants__img">
-                                    <template v-for="(thumb, photoIndex) in list.photo" :key="`photo${photoIndex}`">
-                                            <img :src="thumb.src" alt="">
-                                    </template>
-                                </figure>
                             </template>
-                        </li>
-                    </template>
-                </template>
+                        </ul>
 
-                <template v-else>
-                    <p class="fb__restaurants__empty">
-                        리스트가 없습니다.
-                    </p>
+                        <template v-if="list.photo && list.photo.length">
+                            <figure class="fb__layer__img">
+                                <template v-for="(thumb, photoIndex) in list.photo" :key="`photo${photoIndex}`">
+                                        <img :src="thumb.src" alt="">
+                                </template>
+                            </figure>
+                        </template>
+                    </li>
                 </template>
-            </ul>
-        </div>
+            </template>
+
+            <template v-else>
+                <p class="fb__layer__empty">
+                    리스트가 없습니다.
+                </p>
+            </template>
+        </ul>
     </article>
+
+    <DetailLayer 
+        v-if="isDetailLayerShow"
+        v-model:restaurant="detailRestaurant"
+        @close-detail-layer="closeDetailLayer"
+    ></DetailLayer>
 </template>
 
 <script>
 import { ref, reactive, computed, onMounted, nextTick, watch} from "vue";
 import { useStore } from "vuex";
-import { connectDatabase } from "../composables/connectDatabase";
+import { connectDatabase } from "@/composables/connectDatabase";
+import DetailLayer from "@/components/DetailLayer.vue";
 
 export default {
-    name: "RestaurantList",
-
+    name: "ListLayer",
+    components: {
+        DetailLayer
+    },
     setup(props, { emit }) {
         const store = useStore();
         const { emitter, selectedMenu, matchedRests } = store.state;
@@ -94,7 +104,7 @@ export default {
 
         const customStyle = computed(() => {
             const headerEl = document.querySelector(".fb__map__header");
-            const touchEl = document.querySelector(".fb__restaurants__touch");
+            const touchEl = document.querySelector(".fb__layer__touch");
 
             //내부 스크롤
             if (innerScrollAble.value) {
@@ -181,12 +191,8 @@ export default {
             requestPositions();
         }
 
-        const openDetailLayer = () => {
-            console.log("openDetailLayer")
-        }
-
-        const closeDetailLayer = () => {
-            // document.querySelector(".fb__restaurants__space")
+        const openDetailLayer = (restaurant) => {
+            emit("open-detail-layer", restaurant)
         }
 
         return {
@@ -201,7 +207,6 @@ export default {
             restaurants,
             
             openDetailLayer,
-            closeDetailLayer
         }
     }
 }

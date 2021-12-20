@@ -148,6 +148,7 @@ export default {
             store.dispatch("saveSelectedMenu", selectedMenu.value)
         }
 
+        getMenuData();
         onMounted(() => {
 
         })
@@ -156,7 +157,8 @@ export default {
         return {
             fetches,
             menuList,
-            menuRolling
+            menuRolling,
+            
         }
     }
 }
