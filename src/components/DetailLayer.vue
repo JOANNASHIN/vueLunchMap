@@ -21,8 +21,9 @@
             
             <div class="fb__detail__info">
                 <p class="fb__detail__basic">
-                    <span>걸어서 약 {{restaurant.value.howFar}}분</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
-                    <span>별점 {{restaurant.value.score}}점</span>
+                    <span>회사에서 걸어서 약 {{restaurant.value.howFar}}분정도 걸려요.</span>
+                    <!-- &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+                    <span>별점 {{restaurant.value.score}}점</span> -->
                 </p>
 
                 <p class="fb__detail__desc">{{restaurant.value.description}}</p>

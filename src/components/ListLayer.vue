@@ -71,6 +71,7 @@ import { ref, reactive, computed, onMounted, nextTick, watch} from "vue";
 import { useStore } from "vuex";
 import { connectDatabase } from "@/composables/connectDatabase";
 import DetailLayer from "@/components/DetailLayer.vue";
+import restaurantData from '@/data/restaurant.json';
 
 export default {
     name: "ListLayer",
@@ -175,7 +176,8 @@ export default {
         const restaurants = ref([]);
    
         const requestPositions = async () => {
-            const response = await fetchRestaurantList();
+            const response = restaurantData.data;
+            // const response = await fetchRestaurantList();
             restaurants.value= response;
         }
 

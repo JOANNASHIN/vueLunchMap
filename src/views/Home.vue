@@ -55,6 +55,7 @@
 import { ref, reactive, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
 import Swiper from "swiper";
+import menuData from '@/data/menu.json';
 
 export default {
     name: "Home",
@@ -74,7 +75,8 @@ export default {
 
         const getMenuData = async () => {
             try {
-                const response = await requestMenuList();
+                const response = menuData.data;
+                // const response = await requestMenuList();
                 if (response) menuList.value = response;
 
                 fetches.getMenuData = true;
@@ -148,11 +150,12 @@ export default {
             store.dispatch("saveSelectedMenu", selectedMenu.value)
         }
 
-        getMenuData();
-        onMounted(() => {
+        // if () {
+            getMenuData();
+        // }
+        // else {
 
-        })
-
+        // }
         
         return {
             fetches,

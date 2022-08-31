@@ -33,7 +33,7 @@ import { connectDatabase } from "../composables/connectDatabase";
 import MapHeader from "../components/MapHeader";
 import ListLayer from "../components/ListLayer";
 import DetailLayer from "@/components/DetailLayer.vue";
-
+import restaurantData from '@/data/restaurant.json';
 export default {
     name: "Map",
 
@@ -56,6 +56,8 @@ export default {
 
         const searchRestaurant = (e) => {
             searchWord.value = e;
+
+            if (e != "") store.dispatch("saveSelectedMenu", e);
         }
 
         watch(searchWord, () => {
@@ -69,7 +71,8 @@ export default {
         let positionList = [];
    
         const requestPositions = async () => {
-            const response = await fetchRestaurantList();
+            const response = restaurantData.data;
+            // const response = await fetchRestaurantList();
             positionList = response;
 
             setKakaoMap();
@@ -119,7 +122,6 @@ export default {
 
             drawMarkers();
         }
-
         
         const removeMarkers = () => {
             if (markers && markers.length) {
